@@ -1,6 +1,13 @@
+
+.bss
+str_ecx:
+.string ""
+
 .section .data
-
-
+nome:
+.string "                "
+nome_len:
+.long . - nome
 pilot_0_str:
     .string   "Pierre Gasly\0"
 pilot_1_str:
@@ -42,9 +49,8 @@ pilot_18_str:
 pilot_19_str:
     .string  "Valtteri Bottas\0"
 
-
 invalid_pilot_str:	
-.string "Invalid\0"
+.string "Invalid\n\0"
 
 
 .section .text
@@ -53,22 +59,182 @@ invalid_pilot_str:
 telemetry:
     movl 4(%esp),%esi 
     movl 8(%esp), %edi
+
+
 pushl %eax
 pushl %ebx
 pushl %ecx
 pushl %edx
 
+xorl %ecx, %ecx
+xorl %eax, %eax
+leal nome, %eax
+leggi_intero_pilota_dal_file:
+ movb (%esi,%ecx),  %bl
+ movb %bl,(%eax,%ecx) 
+ incl %ecx
+ cmpb $10,%bl
+ jne leggi_intero_pilota_dal_file
 
-xorl %ecx,%ecx
 
-ciclo_lettura:
-    movb (%esi,%ecx),  %al
-    movb %al,(%edi,%ecx)
+xorl %ecx, %ecx
+xorl %edx, %edx
+xorl %ebx,%ebx
+
+ leal nome, %ecx
+ #ebx indice
+ #sto spostando il nome del pilota al indirizzo di nome
+c:
+ movb (%eax,%ebx),%dl
+ movb %dl, (%ecx,%ebx)
+ inc %ebx
+ cmp $10, %dl
+ je f
+ jmp c
+
+f:
+xorl %ecx, %ecx
+xorl %edx, %edx
+xorl %ebx,%ebx
+xorl %eax,%eax
+
+p_0:
+    #spostare uno alla volta (di nome) dentro di un registro, la stessa cosa per il (pilot)
+    #finche non troviamo il \0 e dopo  commparison di tutti due registri
+    #amen
+    movl (nome), %eax
+    cmp (pilot_0_str), %eax
+    je stampa
+p_1:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_1_str), %eax
+    je stampa
     
-    incl %ecx
+p_2:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_2_str), %eax
+    je stampa
+p_3:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_3_str), %eax
+    je stampa
+p_4:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_4_str), %eax
+    je stampa
+p_5:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_5_str), %eax
+    je stampa
+p_6:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_6_str), %eax
+    je stampa
+p_7:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_7_str), %eax
+    je stampa
+p_8:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_8_str), %eax
+    je stampa
+p_9:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_9_str), %eax
+    je stampa
+p_10:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_10_str), %eax
+    je stampa
+p_11:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_11_str), %eax
+    je stampa
+p_12:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_12_str), %eax
+    je stampa
+p_13:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_13_str), %eax
+    je stampa
+p_14:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_14_str), %eax
+    je stampa
+p_15:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_15_str), %eax
+    je stampa
+p_16:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_16_str), %eax
+    je stampa
+p_17:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_17_str), %eax
+    je stampa
+p_18:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_18_str), %eax
+    je stampa
+p_19:
+    inc %ecx
+    movl (nome), %eax
+    cmp (pilot_19_str), %eax
+    je stampa
+jmp invalid
+invalid:
+ xorl %ecx, %ecx
+ xorl %edx, %edx
+ xorl %ebx,%ebx
+ xorl %eax,%eax
 
-    cmpb $0,%al
-jne ciclo_lettura
+ leal invalid_pilot_str, %eax
+    stampa_invalid:
+        movb (%eax, %ecx), %bl
+        movb %bl, (%edi,%ecx)
+
+        inc %ecx
+        cmp $0, %bl
+        je end
+        jmp stampa_invalid 
+
+stampa:
+    addl $48, %ecx
+    movl %ecx, (str_ecx)
+
+ movl $4, %eax
+ movl $1, %ebx
+ movl $str_ecx, %ecx
+ movl $1, %edx
+ int $0x80
+
+
+
+
+salta:
+
+
+end:
 
 popl %edx
 popl %ecx
