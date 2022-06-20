@@ -4,6 +4,11 @@ str_ecx:
 .string ""
 
 .section .data
+
+val_id:
+.long 0
+
+
 nome:
 .string "                "
 nome_len:
@@ -102,106 +107,561 @@ p_0:
     #spostare uno alla volta (di nome) dentro di un registro, la stessa cosa per il (pilot)
     #finche non troviamo il \0 e dopo  commparison di tutti due registri
     #amen
-    movl (nome), %eax
-    cmp (pilot_0_str), %eax
+
+    #pushl %ecx
+    #xorl %ecx,%ecx
+
+    
+ciclo0:  #cambio 1
+
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_0_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input        #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare0   #cambio 3                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input:
+    cmpb $10,%dl
     je stampa
+    jne p_1
+
+continua_cilare0:       #cambio 4
+    cmp %dl, %cl
+    je ciclo0           #cambio 5
+    jmp p_1             #cambio
+
+
+
+
+
 p_1:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_1_str), %eax
+    #popl %ecx
+    xorl %ecx,%ecx
+    incl val_id
+
+
+
+          
+ciclo1:  #cambio 1
+
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_1_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input1        #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare1   #cambio 3                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input1:
+    cmpb $10,%dl
     je stampa
+    jne p_2             #cambio 4
+
+continua_cilare1:       #cambio 5
+    cmp %dl, %cl
+    je ciclo1           #cambio 6
+    jmp p_2             #cambio 7
     
 p_2:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_2_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+     ciclo2:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_2_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input2        #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare2   #cambio 3                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input2:
+    cmpb $10,%dl
     je stampa
+    jne p_3             #cambio 5
+
+continua_cilare2:       #cambio 6
+    cmp %dl, %cl
+    je ciclo2           #cambio 7
+    jmp p_3            #cambio 8
+
 p_3:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_3_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+    ciclo3:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_3_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input3        #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare3   #cambio 3                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input3:
+    cmpb $10,%dl
     je stampa
+    jne p_4             #cambio 5
+
+continua_cilare3:       #cambio 6
+    cmp %dl, %cl
+    je ciclo3           #cambio 7
+    jmp p_4             #cambio 8
+
 p_4:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_4_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+    ciclo4:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_4_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input4        #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare4   #cambio 3                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input4:
+    cmpb $10,%dl
     je stampa
+    jne p_5             #cambio 5
+
+continua_cilare4:       #cambio 6
+    cmp %dl, %cl
+    je ciclo4           #cambio 7
+    jmp p_5             #cambio 8
 p_5:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_5_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+     ciclo5:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_5_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input5        #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare5   #cambio 3                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input5:
+    cmpb $10,%dl
     je stampa
+    jne p_6             #cambio 5
+
+continua_cilare5:       #cambio 6
+    cmp %dl, %cl
+    je ciclo5           #cambio 7
+    jmp p_6             #cambio 8
 p_6:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_6_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+    ciclo6:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_6_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input6  #cambio 3      #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare6   #cambio 4                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input6: #cambio 5
+    cmpb $10,%dl
     je stampa
+    jne p_7             #cambio 6
+
+continua_cilare6:       #cambio 7
+    cmp %dl, %cl
+    je ciclo6           #cambio 8
+    jmp p_7             #cambio 9
 p_7:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_7_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+    ciclo7:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_7_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input7  #cambio 3      #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare7   #cambio 4                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input7: #cambio 5
+    cmpb $10,%dl
     je stampa
+    jne p_8             #cambio 6
+
+continua_cilare7:       #cambio 7
+    cmp %dl, %cl
+    je ciclo7           #cambio 8
+    jmp p_8             #cambio 9
 p_8:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_8_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+    
+    ciclo8:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_8_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input8  #cambio 3      #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare8   #cambio 4                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input8: #cambio 5
+    cmpb $10,%dl
     je stampa
+    jne p_9             #cambio 6
+
+continua_cilare8:       #cambio 7
+    cmp %dl, %cl
+    je ciclo8           #cambio 8
+    jmp p_9             #cambio 9
 p_9:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_9_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+   
+    ciclo9:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_9_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input9  #cambio 3      #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare9   #cambio 4                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input9: #cambio 5
+    cmpb $10,%dl
     je stampa
+    jne p_10             #cambio 6
+
+continua_cilare9:       #cambio 7
+    cmp %dl, %cl
+    je ciclo9           #cambio 8
+    jmp p_10             #cambio 9
 p_10:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_10_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+    ciclo10:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_10_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input10  #cambio 3      #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare10   #cambio 4                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input10: #cambio 5
+    cmpb $10,%dl
     je stampa
+    jne p_11             #cambio 6
+
+continua_cilare10:       #cambio 7
+    cmp %dl, %cl
+    je ciclo10           #cambio 8
+    jmp p_11             #cambio 9
 p_11:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_11_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+    ciclo11:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_11_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input11  #cambio 3      #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare11   #cambio 4                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input11: #cambio 5
+    cmpb $10,%dl
     je stampa
+    jne p_12             #cambio 6
+
+continua_cilare11:       #cambio 7
+    cmp %dl, %cl
+    je ciclo11           #cambio 8
+    jmp p_12             #cambio 9
 p_12:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_12_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+    ciclo12:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_12_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input12  #cambio 3      #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare12   #cambio 4                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input12: #cambio 5
+    cmpb $10,%dl
     je stampa
+    jne p_13             #cambio 6
+
+continua_cilare12:       #cambio 7
+    cmp %dl, %cl
+    je ciclo12           #cambio 8
+    jmp p_13             #cambio 9
 p_13:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_13_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+    ciclo13:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_13_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input13  #cambio 3      #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare13   #cambio 4                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input13: #cambio 5
+    cmpb $10,%dl
     je stampa
+    jne p_14             #cambio 6
+
+continua_cilare13:       #cambio 7
+    cmp %dl, %cl
+    je ciclo13           #cambio 8
+    jmp p_14             #cambio 9
 p_14:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_14_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+     ciclo14:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_14_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input14  #cambio 3      #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare14   #cambio 4                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input14: #cambio 5
+    cmpb $10,%dl
     je stampa
+    jne p_15             #cambio 6
+
+continua_cilare14:       #cambio 7
+    cmp %dl, %cl
+    je ciclo14           #cambio 8
+    jmp p_15             #cambio 9
 p_15:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_15_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+    ciclo15:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_15_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input15  #cambio 3      #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare15   #cambio 4                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input15: #cambio 5
+    cmpb $10,%dl
     je stampa
+    jne p_16             #cambio 6
+
+continua_cilare15:       #cambio 7
+    cmp %dl, %cl
+    je ciclo15           #cambio 8
+    jmp p_16             #cambio 9
 p_16:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_16_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+      ciclo16:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_16_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input16  #cambio 3      #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare16   #cambio 4                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input16: #cambio 5
+    cmpb $10,%dl
     je stampa
+    jne p_17             #cambio 6
+
+continua_cilare16:       #cambio 7
+    cmp %dl, %cl
+    je ciclo16           #cambio 8
+    jmp p_17             #cambio 9
 p_17:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_17_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+    ciclo17:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_17_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input17  #cambio 3      #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare17   #cambio 4                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input17: #cambio 5
+    cmpb $10,%dl
     je stampa
+    jne p_18             #cambio 6
+
+continua_cilare17:       #cambio 7
+    cmp %dl, %cl
+    je ciclo17           #cambio 8
+    jmp p_18             #cambio 9
 p_18:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_18_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+      ciclo18:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_18_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input18  #cambio 3      #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare18   #cambio 4                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input18: #cambio 5
+    cmpb $10,%dl
     je stampa
+    jne p_19             #cambio 6
+
+continua_cilare18:       #cambio 7
+    cmp %dl, %cl
+    je ciclo18           #cambio 8
+    jmp p_19             #cambio 9
 p_19:
-    inc %ecx
-    movl (nome), %eax
-    cmp (pilot_19_str), %eax
+    xorl %ecx,%ecx
+    incl val_id
+
+
+     ciclo19:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+                                            #input  in eax
+    movb (%eax,%ebx),%dl                    #ebx fa da contatore
+    
+    xorl %eax, %eax                         #azzero eax per riutilizzarlo
+    leal pilot_19_str, %eax    #cambio 2              #sposto nome pilota con id 0 in eax
+
+    movb (%eax, %ebx),%cl
+    incl %ebx
+    cmpb $0, %cl
+    je compara_anche_nome_file_input19  #cambio 3      #se arrivo a fine stringa, controllo la fine anche dell'altra parola
+    jmp continua_cilare19   #cambio 4                 #altrimenti salto la prossima etichetta
+compara_anche_nome_file_input19: #cambio 5
+    cmpb $10,%dl
     je stampa
-jmp invalid
+    jne invalid             #cambio 6
+
+continua_cilare19:       #cambio 7
+    cmp %dl, %cl
+    je ciclo19           #cambio 8
+    jmp invalid             #cambio 9
+
 invalid:
  xorl %ecx, %ecx
  xorl %edx, %edx
@@ -219,14 +679,15 @@ invalid:
         jmp stampa_invalid 
 
 stampa:
+    movl val_id,%ecx
     addl $48, %ecx
     movl %ecx, (str_ecx)
 
- movl $4, %eax
- movl $1, %ebx
- movl $str_ecx, %ecx
- movl $1, %edx
- int $0x80
+    movl $4, %eax
+    movl $1, %ebx
+    movl $str_ecx, %ecx
+    movl $1, %edx
+    int $0x80
 
 
 
