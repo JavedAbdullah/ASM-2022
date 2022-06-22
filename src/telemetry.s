@@ -3,6 +3,9 @@
 str_ecx:
 .string ""
 
+valore_tempo:
+.string ""
+
 .section .data
 
 val_id:
@@ -106,12 +109,7 @@ xorl %eax,%eax
 p_0:
     #spostare uno alla volta (di nome) dentro di un registro, la stessa cosa per il (pilot)
     #finche non troviamo il \0 e dopo  commparison di tutti due registri
-    #amen
-
-    #pushl %ecx
-    #xorl %ecx,%ecx
-
-    
+    #amen    
 ciclo0:  #cambio 1
 
     leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
@@ -136,18 +134,11 @@ continua_cilare0:       #cambio 4
     je ciclo0           #cambio 5
     jmp p_1             #cambio
 
-
-
-
-
 p_1:
     #popl %ecx
     xorl %ecx,%ecx
     incl val_id
-
-
-
-          
+      
 ciclo1:  #cambio 1
 
     leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
@@ -230,7 +221,6 @@ continua_cilare3:       #cambio 6
 p_4:
     xorl %ecx,%ecx
     incl val_id
-
 
     ciclo4:  #cambio 1
     leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
@@ -338,8 +328,6 @@ continua_cilare7:       #cambio 7
 p_8:
     xorl %ecx,%ecx
     incl val_id
-
-
     
     ciclo8:  #cambio 1
     leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
@@ -366,7 +354,6 @@ continua_cilare8:       #cambio 7
 p_9:
     xorl %ecx,%ecx
     incl val_id
-
 
    
     ciclo9:  #cambio 1
@@ -678,23 +665,34 @@ invalid:
         je end
         jmp stampa_invalid 
 
+
+
+#salta a questa etichetta quando trova un nome giusto 
 stampa:
-    movl val_id,%ecx
-    addl $48, %ecx
-    movl %ecx, (str_ecx)
+   # ID pilota si trova dentro val_id
+   xorl %ebx,%ebx           #dai azzeriamo sto ebx
+   
+   # salto il nome per andare ai dati 
+    movb (%esi,%ecx),  %al       #prendo il contenuto esi in pos ecx lo metto in al
+    #movb %al,(%edi,%ecx)         
+    
+    incl %ecx                    #incremento ecx
 
-    movl $4, %eax
-    movl $1, %ebx
-    movl $str_ecx, %ecx
-    movl $1, %edx
-    int $0x80
+    cmpb $10,%al                 
+    jne stampa
+    je elaborazione_dati
 
+#lavoro con i dati ora che ho saltato il nome
+elaborazione_dati:
+    #in esi,ecx ce' il dato saltando il nome
+     movb (%esi,%ecx),  %al       #prendo il contenuto esi in pos ecx lo metto in al
+     movb %al,(%edi,%ebx) 
+     incl %ecx  
+     incl %ebx
+     cmpb $0,%al
+     jne elaborazione_dati
 
-
-
-salta:
-
-
+#etichetta dove salto dopo aver stampato ivalid per conludere il programma
 end:
 
 popl %edx

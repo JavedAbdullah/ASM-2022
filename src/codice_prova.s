@@ -243,3 +243,15 @@ stampa_invalid:
     cmp $0, %bl
     je end
     jmp stampa_invalid 
+    
+####################################
+stama:
+ movl val_id,%ecx
+    addl $48, %ecx
+    movl %ecx, (str_ecx)
+
+    movl $4, %eax
+    movl $1, %ebx
+    movl $str_ecx, %ecx
+    movl $1, %edx
+    int $0x80
