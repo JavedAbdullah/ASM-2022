@@ -669,30 +669,37 @@ invalid:
 
 #salta a questa etichetta quando trova un nome giusto 
 stampa:
-   # ID pilota si trova dentro val_id
+    # ID pilota si trova dentro val_id
    xorl %ebx,%ebx           #dai azzeriamo sto ebx
    
    # salto il nome per andare ai dati 
-    movb (%esi,%ecx),  %al       #prendo il contenuto esi in pos ecx lo metto in al
-    #movb %al,(%edi,%ecx)         
+    movb (%esi,%ecx),  %al       #prendo il contenuto esi in pos ecx lo metto in al       
     
     incl %ecx                    #incremento ecx
 
     cmpb $10,%al                 
     jne stampa
-    je elaborazione_dati
+    je modifica_esi
+
+#modifico esi cosi parte da dopo il nome
+modifica_esi:
+    addl %ecx,%esi
 
 #lavoro con i dati ora che ho saltato il nome
 elaborazione_dati:
-    #in esi,ecx ce' il dato saltando il nome
-     movb (%esi,%ecx),  %al       #prendo il contenuto esi in pos ecx lo metto in al
-     movb %al,(%edi,%ebx) 
-     incl %ecx  
-     incl %ebx
-     cmpb $0,%al
+                                #in esi,ecx ce' il dato saltando il nome
+                                #ricorda che esi e edi puntano a due posti avanti 
+
+    xorl %ebx,%ebx              #dai azzeriamo sto ebx
+
+     movl (%esi),  %ebx          #prendo il contenuto del puntatore a esi in pos ecx lo metto in ebx
+     movl %ebx,(%edi) 
+     addl $1,%esi 
+     addl $1,%edi
+     cmpb $10,(%esi)
      jne elaborazione_dati
 
-#etichetta dove salto dopo aver stampato ivalid per conludere il programma
+#etichetta dove salto  per conludere il programma
 end:
 
 popl %edx
