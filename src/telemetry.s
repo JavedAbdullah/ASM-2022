@@ -692,12 +692,76 @@ elaborazione_dati:
 
     xorl %ebx,%ebx              #dai azzeriamo sto ebx
 
-     movl (%esi),  %ebx          #prendo il contenuto del puntatore a esi in pos ecx lo metto in ebx
-     movl %ebx,(%edi) 
-     addl $1,%esi 
-     addl $1,%edi
-     cmpb $10,(%esi)
-     jne elaborazione_dati
+    cmpb $0, (%esi)
+    je end
+    movl %esi, %ebx
+trova_prima_virgola:
+    addl $1, %ebx
+	cmpb $44, (%ebx)
+    jne trova_prima_virgola
+    
+    #continuo dopo che ho trovato la prima virgola
+    xorl %ecx,%ecx
+    xorl %eax,%eax
+    xorl %edx,%edx
+    movl val_id,%ecx
+
+
+converti_in_num_id_file_input:
+    addl $1,%ebx            #punto avanti
+    movb (%ebx), %dl        #metto dentro dl incontenuto di dove punto
+    subb $48,%dl            #tolgo 48 per avere il numero 
+    addl $1,%ebx    
+    cmpb $44,(%ebx) 
+    je controlliamo_id   
+    movb $10,%al
+    mulb %dl
+    movb (%ebx), %dl
+    subb $48,%dl
+    addb %dl,%al
+
+
+
+
+
+    
+controlliamo_id:
+    #in eax ho id input file input
+    #in ecx ho id da me cercato attualmente
+
+    
+    cmpl %eax,%ecx
+    je finaimo_riga_sapendo_id
+    jmp finiamo_riga_con_id_no_uguale
+ 
+
+finiamo_riga_con_id_no_uguale:
+    #faro concludere la riga fino a \n (cioe portero esi fino a \n)
+    addl $1,%esi
+    cmpb $10,(%esi)
+    jne finiamo_riga_con_id_no_uguale
+    je elaborazione_dati
+
+
+#faro operazioni sulla riga perche id e' quello cercato
+finaimo_riga_sapendo_id:
+
+    addl $1,%esi
+    movb (%esi),  %bl
+    movb %bl,(%edi)
+    addl $1,%edi
+    cmpb $44,%bl
+    jne finaimo_riga_sapendo_id
+    jmp salta_stampa_id
+salta_stampa_id:
+    #stampo il tempo del id corretto evviva :)
+    addl $1,%esi
+    cmpb $44,(%esi)
+    jne salta_stampa_id
+
+
+
+
 
 #etichetta dove salto  per conludere il programma
 end:
