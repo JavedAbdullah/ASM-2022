@@ -12,7 +12,16 @@ valore_tempo:
 max_rpm:
 .long 0
 
+max_temperatura:
+.long 0
 
+
+max_velocita:
+    .long 0
+num_velocite:
+    .long 0
+somma_velocita:
+    .long 0
 
 val_id:
 .long 0
@@ -699,7 +708,7 @@ elaborazione_dati:
     xorl %ebx,%ebx              #dai azzeriamo sto ebx
 
     cmpb $0, (%esi)
-    je end
+    je stampa_ultima_riga
     movl %esi, %ebx
 trova_prima_virgola:
     addl $1, %ebx
@@ -749,38 +758,59 @@ finiamo_riga_con_id_no_uguale:
     je elaborazione_dati
 salta_a_end_da_ultima_riga_no_uguale:
     cmpb $0,(%esi)
-    je end
+    je stampa_ultima_riga
     jne finiamo_riga_con_id_no_uguale
 
 
 #faro operazioni sulla riga perche id e' quello cercato
 finaimo_riga_sapendo_id:
 
+stampiamo_tempo:
     # stampo il tempo della riga corretta
     addl $1,%esi
     movb (%esi),  %bl
-    movb %bl,(%edi)
     addl $1,%edi
+    movb %bl,(%edi)
     cmpb $44,%bl
-    jne finaimo_riga_sapendo_id
+    jne stampiamo_tempo
     jmp salta_stampa_id
 salta_stampa_id:
     #stampo il tempo del id corretto evviva :)
     addl $1,%esi
     cmpb $44,(%esi)
     jne salta_stampa_id
-    movl %esi,%ebx
+    
+   
+
+
+salta_velocita:
+    
+    xorl %ebx,%ebx
+    xorl %eax,%eax
+    xorl %ecx,%ecx
+    addl $1,%esi
+livello_velocita_interno:
+   xorl %ebx,%ebx
+
+    movb (%esi), %bl
+    subb $48,%bl
+    movl $10,%eax
+    addl %ecx,%ebx
+    mull %ebx
+    addl $1,%esi
+    cmpb $44,(%esi)
+    je salva_in_stack_la_velocita
+    movl %eax,%ecx
+    jmp livello_velocita_interno
+
 
 ###########################################
 #   ricordati di pushare da bravo pusher  #
 ###########################################
-    #pushl %ebx
-
-salta_velocita:
-    
-    addl $1,%esi
-    cmpb $44,(%esi)
-    jne salta_velocita
+salva_in_stack_la_velocita:
+    #la velocita si trova in %ebx
+    pushl %ebx
+    xorl %ebx,%ebx
 
 livello_rpm:
 
@@ -811,12 +841,12 @@ confronta_rmp:
     #si trova in ebx rpm
     cmpl %ebx,max_rpm
     #se %ebx < rmp >
-    jl imposta_max_rmp
-    jmp continua_rmp
-imposta_max_rmp:
+    jl imposta_max_rpm
+    jmp continua_rpm
+imposta_max_rpm:
     movl %ebx,max_rpm
 
-continua_rmp:
+continua_rpm:
       cmpl $5000,%ebx
       jle rpm_low
       cmpl $10000,%ebx
@@ -831,6 +861,9 @@ rpm_low:
     addl $1,%edi             #guadagniamo terreno
     movb $87,(%edi) #W
     
+    #ricordati di saltare medium e high
+    jmp continua_con_temp                   #mi serve per evitare di stampare anche medium
+
 rpm_medium:
     #stampa MEDIUM
     movb $77,(%edi) #M
@@ -845,6 +878,7 @@ rpm_medium:
     addl $1,%edi
     movb $77,(%edi) #M
 
+    jmp continua_con_temp       #mi serve per evitare di stampare anche high
 
 rpm_high:
     #stampa HIGH
@@ -855,57 +889,171 @@ rpm_high:
     movb $71,(%edi) #G
     addl $1,%edi
     movb $72,(%edi) #H
-
+    
+    jmp continua_con_temp
 
  # esi punta alla virgola dopo rpm
  # ad edi serve aggiugnre +1 per poterci scrivere 
 
  
-/*
+continua_con_temp:
+    #stampo la virgola 
+    addl $1,%edi
+    movb $44,(%edi)
+  
+
 livello_temperatura:
     xorl %ebx,%ebx
-
-    addl $1,%esi
-    cmpb $10,(%esi)
-    je prima_di_livello_velocita
-    
-                                        #dovrei aggiungere in controllo se e' anche \0
-
-    movb (%esi),  %bl
-    movb %bl,(%edi)
-    addl $1,%edi
-    cmpb $10,%bl
-    jne livello_temperatura
-
-
-
-
-
-
-prima_di_livello_velocita:
-    movb $44,(%edi)
-    addl $1,%edi
-    #forse devo aggiungere +1 a edi
+    xorl %eax,%eax
     xorl %ecx,%ecx
-    popl %ecx
-livello_velocita:
-   xorl %ebx,%ebx
-    addl $1,%ecx
-    cmpb $44,(%ecx)
-    je controllo_se_sono_ultima_riga
-    movb (%ecx),  %bl
-    movb %bl,(%edi)
+    addl $1,%esi
+
+livello_temperatura_interno:
+                                        #dovrei aggiungere in controllo se e' anche \0
+    xorl %ebx,%ebx
+    movb (%esi), %bl
+    subb $48,%bl
+    movl $10,%eax
+    addl %ecx,%ebx
+    mull %ebx
+    addl $1,%esi
+    cmpb $10,(%esi)                 #qua invece della virgola conparo l'acapo (\n)
+    je confronta_temperatura
+    cmpb $0,(%esi)
+    je confronta_temperatura
+    movl %eax,%ecx
+    jmp livello_temperatura_interno
+    
+confronta_temperatura:
+    #in ebx avro' la Temperatura
+    cmpl %ebx, max_temperatura
+    jl  imposta_max_temperatura
+    jmp continua_temperatura
+imposta_max_temperatura:
+    movl %ebx, max_temperatura      # imposto la temperatura massima
+continua_temperatura:
+     cmpl $90,%ebx
+      jle temp_low
+      cmpl $110,%ebx
+      jle temp_medium
+      jmp temp_high
+
+temp_low:
+    #stampo LOW
+    addl $1,%edi            #aggiungo 1 per guadagnare terreno per la stampa
+    movb $76,(%edi) #L
+    addl $1,%edi             #guadagniamo terreno
+    movb $79,(%edi) #O
+    addl $1,%edi             #guadagniamo terreno
+    movb $87,(%edi) #W
+    
+    jmp continuamo_con_velocita         #mi serve per non stampare medium e high
+temp_medium:
+    addl $1,%edi            #aggiungo 1 per guadagnare terreno per la stampa
+   #stampa MEDIUM
+    movb $77,(%edi) #M
+    addl $1,%edi             #guadagniamo terreno
+    movb $69,(%edi) #E       #scriviamo sul terreno guadagnato
     addl $1,%edi
-    cmpb $44,(%ecx)
-    jne livello_velocita
+    movb $68,(%edi) #D
+    addl $1,%edi
+    movb $73,(%edi) #I
+    addl $1,%edi
+    movb $85,(%edi) #U
+    addl $1,%edi
+    movb $77,(%edi) #M
+
+    jmp continuamo_con_velocita       #mi serve per evitare di stampare anche high
+temp_high:
+    addl $1,%edi            #aggiungo 1 per guadagnare terreno per la stampa
+    #stampo HIGH
+    movb $72,(%edi) #H
+    addl $1,%edi                #guadagniamo terreno
+    movb $73,(%edi) #I          #scriviamo sul terreno guadagnato
+    addl $1,%edi
+    movb $71,(%edi) #G
+    addl $1,%edi
+    movb $72,(%edi) #H
+    
+    jmp continuamo_con_velocita
+
+
+
+continuamo_con_velocita:
+    #stampiamo la virgola
+    addl $1,%edi
+    movb $44,(%edi)
+
+################################################
+#   ricordati di poppare da bravo non so cosa  #
+################################################
+    xorl %ebx,%ebx
+    popl %ebx
+livello_velocita: 
+   #faccio cose con la velocita
+    cmp %ebx, max_velocita
+      jl  imposta_max_velocita
+      jmp confronta_velocita
+imposta_max_velocita:
+      movl %ebx, max_velocita
+
+
+confronta_velocita:
+        #incrementiamo contatore num di velocita
+        #sommiamo velocita alla somma delle velocita del nostro pilota cercato
+   addl %ebx,somma_velocita
+   incl num_velocite
+
+   cmpl $100,%ebx
+      jle vel_low
+      cmpl $250,%ebx
+      jle vel_medium
+      jmp vel_high
+
+vel_low:
+    #stampo LOW
+    addl $1,%edi            #aggiungo 1 per guadagnare terreno per la stampa
+    movb $76,(%edi) #L
+    addl $1,%edi             #guadagniamo terreno
+    movb $79,(%edi) #O
+    addl $1,%edi             #guadagniamo terreno
+    movb $87,(%edi) #W
+    jmp controllo_se_sono_ultima_riga
+vel_medium:
+      addl $1,%edi            #aggiungo 1 per guadagnare terreno per la stampa
+   #stampa MEDIUM
+    movb $77,(%edi) #M
+    addl $1,%edi             #guadagniamo terreno
+    movb $69,(%edi) #E       #scriviamo sul terreno guadagnato
+    addl $1,%edi
+    movb $68,(%edi) #D
+    addl $1,%edi
+    movb $73,(%edi) #I
+    addl $1,%edi
+    movb $85,(%edi) #U
+    addl $1,%edi
+    movb $77,(%edi) #M
+    jmp controllo_se_sono_ultima_riga
+vel_high:
+
+      addl $1,%edi            #aggiungo 1 per guadagnare terreno per la stampa
+    #stampo HIGH
+    movb $72,(%edi) #H
+    addl $1,%edi                #guadagniamo terreno
+    movb $73,(%edi) #I          #scriviamo sul terreno guadagnato
+    addl $1,%edi
+    movb $71,(%edi) #G
+    addl $1,%edi
+    movb $72,(%edi) #H
+jmp controllo_se_sono_ultima_riga
 
 controllo_se_sono_ultima_riga:
-   cmpb $10,(%esi)
+    #esi dovrebbe contenre \n oppure \0
+    cmpb $10,(%esi)
     je elaborazione_dati
+    cmpb $0,(%esi)
+    je stampa_ultima_riga
 
-
-
-*/
 
 #stampia l'ultia riga
 stampa_ultima_riga:

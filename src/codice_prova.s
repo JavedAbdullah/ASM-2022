@@ -486,11 +486,14 @@ continua:
       MAX_TEMP2:
       movl %eax, max_temp
       CONTINUA_TEMP2:
+
       cmpl $90,%eax
       jle TEMP_LOW
       cmpl $110,%eax
       jle TEMP_MEDIUM
       jmp TEMP_HIGH
+
+
       TEMP_LOW:
       popl %eax   # MI RIPRENDO POSIZIONE OUTPUT
       call stampa_low
@@ -524,11 +527,14 @@ continua:
       call atoi
       addl %eax, somma_velocita
       addl $1, n_velocita
+      
       cmp %eax, max_velocita
       jl  MAX_VELOCITA
       jmp CONTINUA_VELOCITA
       MAX_VELOCITA:
       movl %eax, max_velocita
+
+
       CONTINUA_VELOCITA:
       cmpl $100,%eax
       jle VEL_LOW
