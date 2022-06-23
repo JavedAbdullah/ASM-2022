@@ -746,6 +746,7 @@ finiamo_riga_con_id_no_uguale:
 #faro operazioni sulla riga perche id e' quello cercato
 finaimo_riga_sapendo_id:
 
+    # stampo il tempo della riga corretta
     addl $1,%esi
     movb (%esi),  %bl
     movb %bl,(%edi)
@@ -758,8 +759,66 @@ salta_stampa_id:
     addl $1,%esi
     cmpb $44,(%esi)
     jne salta_stampa_id
+    movl %esi,%ebx
+    pushl %ebx
+
+salta_velocita:
+   
+    addl $1,%esi
+    cmpb $44,(%esi)
+    jne salta_velocita
+
+livello_rmp:
+    xorl %ebx,%ebx
+    addl $1,%esi
+    movb (%esi),  %bl
+    movb %bl,(%edi)
+    addl $1,%edi
+    cmpb $44,%bl
+    jne livello_rmp
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+livello_temperatura:
+    xorl %ebx,%ebx
+    addl $1,%esi
+    cmpb $10,(%esi)
+    je prima_di_livello_velocita
+    movb (%esi),  %bl
+    movb %bl,(%edi)
+    addl $1,%edi
+    cmpb $10,%bl
+    jne livello_temperatura
+prima_di_livello_velocita:
+    movb $44,(%edi)
+    addl $1,%edi
+    #forse devo aggiungere +1 a edi
+    xorl %ecx,%ecx
+    popl %ecx
+livello_velocita:
+   xorl %ebx,%ebx
+    addl $1,%ecx
+    cmpb $44,(%ecx)
+    je end
+    movb (%ecx),  %bl
+    movb %bl,(%edi)
+    addl $1,%edi
+    cmpb $44,(%ecx)
+    jne livello_velocita
+
+#stampia l'ultia riga
+stampa_ultima_riga:
 
 
 
