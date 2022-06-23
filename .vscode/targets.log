@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Jun 23 07:42:55 2022
+# Make data base, printed on Thu Jun 23 14:02:16 2022
 
 # Variables
 
@@ -23,7 +23,7 @@ SNAP_INSTANCE_KEY =
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-3f21ed37-2720-44af-bda0-40f8d48590ce.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-c5a605b5-78a5-4ff2-90fa-5b9f8760cb54.sock
 # environment
 VSCODE_CWD = /home/abdu
 # environment
@@ -97,7 +97,7 @@ SNAP_REEXEC =
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 2829
+VSCODE_PID = 2740
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
@@ -107,7 +107,7 @@ BAMF_DESKTOP_FILE_HINT = /var/lib/snapd/desktop/applications/code_code.desktop
 # makefile (from 'Makefile', line 4)
 FLAGS = -m32 -g -c
 # environment
-SESSION_MANAGER = local/abdu-TM1701:@/tmp/.ICE-unix/1680,unix/abdu-TM1701:/tmp/.ICE-unix/1680
+SESSION_MANAGER = local/abdu-TM1701:@/tmp/.ICE-unix/1703,unix/abdu-TM1701:/tmp/.ICE-unix/1703
 # automatic
 *F = $(notdir $*)
 # environment
@@ -149,7 +149,7 @@ SNAP_USER_COMMON = /home/abdu/snap/code/common
 # environment
 SNAP = /snap/code/99
 # environment
-INVOCATION_ID = 7f2182aa34c746549d8e5ee762114c79
+INVOCATION_ID = ac5971a9e8f44fd98269d3f476c8e62a
 # environment
 SNAP_REVISION = 99
 # environment
@@ -197,11 +197,11 @@ SNAP_DATA = /var/snap/code/99
 # environment
 SNAP_CONTEXT = XzwibXLxksd85iVbT307H4oAjdD4NS-yL807SxE0cT91kFGmWmGp
 # environment
-MANAGERPID = 1264
+MANAGERPID = 1297
 # makefile (from 'Makefile', line 2)
 AS_FLAGS = --32
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 2781
+GIO_LAUNCHED_DESKTOP_FILE_PID = 2692
 # environment
 _ = /snap/code/99/usr/share/code/code
 # environment
@@ -213,7 +213,7 @@ GCC = gcc
 # environment
 GDK_PIXBUF_MODULE_FILE = /home/abdu/snap/code/common/.cache/gdk-pixbuf-loaders.cache
 # environment
-JOURNAL_STREAM = 8:31602
+JOURNAL_STREAM = 8:32014
 # environment
 XDG_SESSION_CLASS = user
 # environment
@@ -278,17 +278,17 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 # Files
 
 obj/main.o: src/main.c
+ 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 14):
 	$(GCC)  $(FLAGS) src/main.c -o obj/main.o
 
- 
 obj/telemetry.o: src/telemetry.s
 #  Implicit rule search has not been done.
 #  Implicit/static pattern stem: ''
-#  Last modified 2022-06-23 00:22:09.467777963
+#  Last modified 2022-06-23 11:58:45.082577862
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # automatic
@@ -353,7 +353,7 @@ all: bin/telemetry
 
 bin/telemetry: obj/telemetry.o obj/main.o
 #  Implicit rule search has not been done.
-#  Last modified 2022-06-23 00:22:09.635781006
+#  Last modified 2022-06-23 11:58:45.142580028
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # variable set hash-table stats:
@@ -364,7 +364,7 @@ bin/telemetry: obj/telemetry.o obj/main.o
 # Not a target:
 src/telemetry.s:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-23 00:25:01.335141804
+#  Last modified 2022-06-23 12:10:57.480436321
 #  File has been updated.
 #  Successfully updated.
 
@@ -393,6 +393,6 @@ src/telemetry.s:
 # strcache performance: lookups = 36 / hit rate = 44%
 # hash-table stats:
 # Load=20/8192=0%, Rehash=0, Collisions=0/36=0%
-# Finished Make data base on Thu Jun 23 07:42:55 2022
+# Finished Make data base on Thu Jun 23 14:02:16 2022
 
  
