@@ -60,15 +60,15 @@ pilot_12_str:
 pilot_13_str:
     .string  "Romain Grosjean\0"
 pilot_14_str:
-    .string  "George Russell\0"
+    .string  "George Russell\0" 
 pilot_15_str:
-    .string  "Sergio Perez\0"
+    .string  "Sergio Perez\0"    #non funge
 pilot_16_str:
-    .string  "Daniil Kvyat\0"
+    .string  "Daniil Kvyat\0"   # non funge
 pilot_17_str:
     .string  "Kimi Raikkonen\0"
 pilot_18_str:
-    .string  "Esteban Ocon\0"
+    .string  "Esteban Ocon\0"   #non funge
 pilot_19_str:
     .string  "Valtteri Bottas\0"
 
@@ -560,8 +560,8 @@ p_16:
     incl val_id
 
 
-      ciclo16:  #cambio 1
-    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+    ciclo16:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota del file 
                                             #input  in eax
     movb (%eax,%ebx),%dl                    #ebx fa da contatore
     
@@ -689,8 +689,8 @@ stampa:
    
    # salto il nome per andare ai dati 
     movb (%esi,%ecx),  %al       #prendo il contenuto esi in pos ecx lo metto in al       
-    
     incl %ecx                    #incremento ecx
+    
 
     cmpb $10,%al                 
     jne stampa
@@ -699,6 +699,7 @@ stampa:
 #modifico esi cosi parte da dopo il nome
 modifica_esi:
     addl %ecx,%esi
+
 
 #lavoro con i dati ora che ho saltato il nome
 elaborazione_dati:
@@ -729,8 +730,8 @@ converti_in_num_id_file_input:
     addl $1,%ebx    
     cmpb $44,(%ebx) 
     je controlliamo_id   
-    movb $10,%al
-    mulb %dl
+    movb $10,%al                # in questo modo se id >=10 sara in eax
+    mulb %dl                    # se id minore di 10 sara in edx
     movb (%ebx), %dl
     subb $48,%dl
     addb %dl,%al
@@ -741,14 +742,46 @@ converti_in_num_id_file_input:
 
     
 controlliamo_id:
-    #in eax ho id input file input
+    #in eax ho id input file input se ecx > 10
+    # in edx ho id input file input se ecx < 10      >
     #in ecx ho id da me cercato attualmente
-
     
+
+    cmpl $10,%ecx                        #se ecx e' maggiore o uguale a 10 
+                                            #salta in ecx_maggiore_uguale_10
+                                            #altrimenti ecx_minore_di_10
+    jge ecx_maggiore_uguale_10
+    jmp ecx_minore_di_10
+
+
+ecx_maggiore_uguale_10:  
+    cmpl $10,%eax
+    jge eax_maggiore_ugale_10
+    jmp eax_minore_di_10
+eax_maggiore_ugale_10:
     cmpl %eax,%ecx
     je finaimo_riga_sapendo_id
     jmp finiamo_riga_con_id_no_uguale
- 
+eax_minore_di_10:
+    jmp finiamo_riga_con_id_no_uguale
+
+
+
+ecx_minore_di_10:
+    cmpl $10,%eax
+    jge con_eax_maggiore_ugale_10
+    jmp edx_minore_di_10            # seguendo questo ragionamento edx sara' sempre minore di 10
+con_eax_maggiore_ugale_10:
+    jmp finiamo_riga_con_id_no_uguale
+edx_minore_di_10:
+    cmpl %edx,%ecx
+    je finaimo_riga_sapendo_id
+    jmp finiamo_riga_con_id_no_uguale
+
+
+
+
+
 
 finiamo_riga_con_id_no_uguale:
     #faro concludere la riga fino a \n (cioe portero esi fino a \n)
@@ -766,21 +799,35 @@ salta_a_end_da_ultima_riga_no_uguale:
 finaimo_riga_sapendo_id:
 
 stampiamo_tempo:
-    # stampo il tempo della riga corretta
+
+    jmp salta_togli_la_capo
+togli_la_capo:
     addl $1,%esi
+salta_togli_la_capo:
+
+    # stampo il tempo della riga corretta
+    xorl %ebx,%ebx
+    
     movb (%esi),  %bl
-    addl $1,%edi
+    cmpb $10,%bl 
+    je togli_la_capo
     movb %bl,(%edi)
-    cmpb $44,%bl
+    addl $1,%edi
+    addl $1,%esi
+    cmpb $44,(%esi)
     jne stampiamo_tempo
     jmp salta_stampa_id
 salta_stampa_id:
+
+
     #stampo il tempo del id corretto evviva :)
     addl $1,%esi
     cmpb $44,(%esi)
     jne salta_stampa_id
     
-   
+  #stampiamo una cara virgola
+    movb $44,(%edi)
+    addl $1,%edi   
 
 
 salta_velocita:
@@ -1048,6 +1095,12 @@ vel_high:
 jmp controllo_se_sono_ultima_riga
 
 controllo_se_sono_ultima_riga:
+    #stampo un a capo dopo la fine della riga
+    addl $1,%edi
+    movb $10,(%edi) #stampo un a capo
+     addl $1,%edi
+
+
     #esi dovrebbe contenre \n oppure \0
     cmpb $10,(%esi)
     je elaborazione_dati
