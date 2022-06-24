@@ -1212,6 +1212,10 @@ stampiamo_vel_media:
     cmp $0, %bl
     jne stampiamo_vel_media
 
+    #stampaimo l'acapo
+    addl $1,(%edi)
+    movb $10,(%edi)
+
 #etichetta dove salto  per conludere il programma
 end:
 
