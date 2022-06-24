@@ -4,8 +4,8 @@ LD_FLAGS = -m elf_i386
 FLAGS = -m32 -g -c
 all: bin/telemetry
 
-bin/telemetry: obj/telemetry.o obj/main.o 
-	$(GCC) -m32 obj/telemetry.o obj/main.o -o bin/telemetry
+bin/telemetry: obj/telemetry.o obj/main.o obj/itoa.o
+	$(GCC) -m32 obj/telemetry.o obj/main.o  obj/itoa.o -o bin/telemetry
 
 obj/telemetry.o: src/telemetry.s
 	$(GCC)  $(FLAGS) src/telemetry.s -o obj/telemetry.o
@@ -14,6 +14,8 @@ obj/main.o: src/main.c
 	$(GCC)  $(FLAGS) src/main.c -o obj/main.o
 
 
+obj/itoa.o: src/itoa.s
+	$(GCC)  $(FLAGS) src/itoa.s -o obj/itoa.o
 # exe:
 # 	./telemetry input.txt output.txt
 

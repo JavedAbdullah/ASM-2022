@@ -18,7 +18,8 @@ max_temperatura:
 
 max_velocita:
     .long 0
-num_velocite:
+
+num_velocita:
     .long 0
 somma_velocita:
     .long 0
@@ -475,7 +476,10 @@ continua_cilare12:       #cambio 7
     je ciclo12           #cambio 8
     jmp p_13             #cambio 9
 p_13:
-    xorl %ecx,%ecx
+     xorl %ecx,%ecx
+     xorl %eax,%eax
+     xorl %ebx,%ebx
+     xorl %edx,%edx
     incl val_id
 
 
@@ -501,13 +505,22 @@ continua_cilare13:       #cambio 7
     cmp %dl, %cl
     je ciclo13           #cambio 8
     jmp p_14             #cambio 9
+
+
+
+
 p_14:
-    xorl %ecx,%ecx
+
+
+     xorl %ecx,%ecx
+     xorl %eax,%eax
+     xorl %ebx,%ebx
+     xorl %edx,%edx
     incl val_id
 
 
-     ciclo14:  #cambio 1
-    leal nome,%eax                          #sposto indirizzo del nome pilota nel file 
+    ciclo14:  #cambio 1
+    leal nome,%eax                          #sposto indirizzo del nome pilota del file 
                                             #input  in eax
     movb (%eax,%ebx),%dl                    #ebx fa da contatore
     
@@ -526,8 +539,12 @@ compara_anche_nome_file_input14: #cambio 5
 
 continua_cilare14:       #cambio 7
     cmp %dl, %cl
-    je ciclo14           #cambio 8
+    je ciclo15           #cambio 8
     jmp p_15             #cambio 9
+
+
+
+
 p_15:
     xorl %ecx,%ecx
     incl val_id
@@ -1049,7 +1066,7 @@ confronta_velocita:
         #incrementiamo contatore num di velocita
         #sommiamo velocita alla somma delle velocita del nostro pilota cercato
    addl %ebx,somma_velocita
-   incl num_velocite
+   incl num_velocita
 
    cmpl $100,%ebx
       jle vel_low
@@ -1111,7 +1128,89 @@ controllo_se_sono_ultima_riga:
 #stampia l'ultia riga
 stampa_ultima_riga:
 
+    #max_rpm #max_temperatura #max_velocita #velocita_media
+    #output ultima riga deve essere:
+    # <rpm max>,<temp max>,<velocità max>,<velocità media>
 
+##########################################
+# stampiamo rpm max
+##########################################
+    movl max_rpm, %eax
+    call itoa       #in edx avro convertito in stringa quello che e' in max_rpm
+    xorl %ecx, %ecx
+    xorl %ebx, %ebx
+    #questo pezzo di codice serve cosi con una lettera rimpiazzo un elemento presente in quel punto nel edi 
+    movb (%edx,%ecx),%bl
+    addb $1,(%edi)
+    movb %bl,(%edi)
+    incl %ecx
+stampa_rpm_max:
+    movb (%edx,%ecx),%bl
+    addl $1,%edi
+    movb %bl,(%edi)
+    incl %ecx
+    cmp $0, %bl
+  jne stampa_rpm_max
+
+  #stampaimo la cara virgola
+    addl $1,(%edi)
+    movb $44,(%edi)
+##########################################
+# stampiamo temperatura max
+##########################################
+    movl max_temperatura,%eax
+    call itoa 
+  xorl %ecx, %ecx
+  xorl %ebx, %ebx
+
+stampaimo_temp_max:
+    movb (%edx,%ecx),%bl
+    addl $1,%edi
+    movb %bl,(%edi)
+    incl %ecx
+    cmp $0, %bl
+    jne stampaimo_temp_max
+
+#stampaimo la cara virgola
+    addl $1,(%edi)
+    movb $44,(%edi)
+
+##########################################
+# stampiamo velocita max
+##########################################
+    movl max_velocita,%eax
+    call itoa 
+    xorl %ecx, %ecx
+    xorl %ebx, %ebx
+stampiamo_vel_max:
+    movb (%edx,%ecx),%bl
+    addl $1,%edi
+    movb %bl,(%edi)
+    incl %ecx
+    cmp $0, %bl
+    jne stampiamo_vel_max
+
+    #stampaimo la cara virgola
+    addl $1,(%edi)
+    movb $44,(%edi)
+
+##########################################
+# stampiamo la velocita media
+##########################################
+    movl somma_velocita, %eax
+    movl num_velocita, %ebx
+    xorl %edx, %edx
+    divl %ebx
+    call itoa
+    xorl %ecx, %ecx
+    xorl %ebx, %ebx
+stampiamo_vel_media:
+    movb (%edx,%ecx),%bl
+    addl $1,%edi
+    movb %bl,(%edi)
+    incl %ecx
+    cmp $0, %bl
+    jne stampiamo_vel_media
 
 #etichetta dove salto  per conludere il programma
 end:
